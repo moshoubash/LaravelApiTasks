@@ -31,3 +31,14 @@ Route::post('/login', function (Request $request) {
         'token' => $user->createToken('api-token')->plainTextToken
     ]);
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::post('/logout', function (Request $request) {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out']);
+    });
+});
